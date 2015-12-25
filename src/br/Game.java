@@ -26,8 +26,8 @@ public class Game {
 		Global.messenger.messageGameStart(gameStart).messageEndOfLine();
 		while (true) {
 			Global.gameTime.step();
-			if ((Global.gameTime.getHour() == 0)
-					&& (Global.gameTime.getMinute() == 0))
+			if ((Global.gameTime.getHours() == 0)
+					&& (Global.gameTime.getMinutes() == 0))
 				Global.messenger.setNeedToWait(true);
 			/*if (Global.gameTime.getMinute() == 0)
 				Global.gameTime.printDayAndTime();*/
@@ -48,7 +48,7 @@ public class Game {
 			if (lastKill.stepDown()) {
 				radius = (int)(0.9 * radius);
 				Global.messenger.messageGameRestricted().messageEndOfLine();
-				lastKill.reset(1, 0, 0);
+				lastKill.set(1, 0, 0);
 			}
 			Global.messenger.flush();
 			if (players.size() == 1) {
