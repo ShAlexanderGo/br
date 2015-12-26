@@ -11,7 +11,6 @@ public class EncounterFinder {
 		for (int i = 0; i < players.size(); i++)
 			groups.add(new Group(players.get(i)));
 		for (int i = 0; i < groups.size(); i++) {
-			//System.out.println(i + " of " + groups.size());
 			Group group1 = groups.get(i);
 			for (int j = i + 1; j < groups.size(); j++) {
 				Group group2 = groups.get(j);

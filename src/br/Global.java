@@ -3,6 +3,7 @@ package br;
 import java.util.Random;
 
 import br.output.Messenger;
+import br.time.Clock;
 
 public class Global {
 
@@ -10,8 +11,12 @@ public class Global {
 	public static Messenger messenger = new Messenger();
 	public static Clock gameTime = new Clock(0, 5, 59) {
 		@Override
+		public int getDays() {
+			return (((getTicks() - 6 * MINUTES_IN_HOUR) / HOURS_IN_DAY) 
+					/ MINUTES_IN_HOUR) + 1;
+		}
+		@Override
 		public String toString() {
-			int ticks = getTicks();
 			int hours = getHours();
 			int minutes = getMinutes();
 			String timeOfDay;
@@ -20,11 +25,9 @@ public class Global {
 			} else {
 				timeOfDay = "Night";
 			}
-			int number = (((ticks - 6 * MINUTES_IN_HOUR) / HOURS_IN_DAY) 
-					/ MINUTES_IN_HOUR) + 1;
-			return timeOfDay + " " + number + " " 
+			return "<" + timeOfDay + " " + getDays() + " " 
 					+ String.format("%02d", hours) + ":" 
-					+ String.format("%02d", minutes);
+					+ String.format("%02d", minutes) + ">";
 		}
 	};
 	

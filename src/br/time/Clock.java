@@ -1,4 +1,4 @@
-package br;
+package br.time;
 
 public class Clock {
 	public static final int MINUTES_IN_HOUR = 60;
@@ -6,38 +6,27 @@ public class Clock {
 	
 	private int ticks;
 	
-	public void set(int days, int hours, int minutes) {
-		ticks = days * HOURS_IN_DAY * MINUTES_IN_HOUR
+	public int toTicks(int days, int hours, int minutes) {
+		return days * HOURS_IN_DAY * MINUTES_IN_HOUR
 				+ hours * MINUTES_IN_HOUR + minutes;
 	}
 	
-	public void step() {
+	public void increase() {
 		ticks++;
 	}
 	
-	public boolean stepDown() {
+	public void decrease() {
 		ticks--;
-		if (ticks < 0) {
+		if (ticks < 0)
 			ticks = 0;
-			return true;
-		}
-		return false;
 	}
 	
     public Clock() {
-    	ticks = 0;
+    	this(0, 0, 0);
     }
     
     public Clock(int days, int hours, int minutes) {
-    	this.set(days, hours, minutes);
-    }
-    
-    @Override
-    public String toString() {
-    	return "day " 
-    			+ Integer.toString(getDays()) 
-    			+ " " + String.format("%02d", getHours()) 
-    			+ ":" + String.format("%02d", getMinutes());
+    	ticks = toTicks(days, hours, minutes);
     }
     
     public int getDays() {
@@ -56,4 +45,8 @@ public class Clock {
 		return ticks;
 	}
 
+	protected void setTicks(int ticks) {
+		this.ticks = ticks;
+	}
+	
 }

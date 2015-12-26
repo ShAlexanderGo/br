@@ -2,13 +2,13 @@ package br;
 
 import java.util.ArrayList;
 
+import br.time.Timer;
+
 public class Game {
 	private int radius = 10_000;
 	
-	
-	
 	private Group players = new Group();
-	private Clock lastKill = new Clock(1, 0, 0);
+	private Timer lastKill = new Timer(1, 0, 0);
 	private EncounterFinder finder = new EncounterFinder();
 	
 	public boolean isCloseToBoundary(Vector position) {
@@ -25,12 +25,20 @@ public class Game {
 		}
 		Global.messenger.messageGameStart(gameStart).messageEndOfLine();
 		while (true) {
-			Global.gameTime.step();
+			Global.gameTime.increase();
+			lastKill.decrease();
 			if ((Global.gameTime.getHours() == 0)
 					&& (Global.gameTime.getMinutes() == 0))
 				Global.messenger.setNeedToWait(true);
-			/*if (Global.gameTime.getMinute() == 0)
-				Global.gameTime.printDayAndTime();*/
+			if (Global.gameTime.getMinutes() == 0) {
+				if (Global.gameTime.getHours() == 6) {
+					Global.messenger.messageDayStarts(Global.gameTime)
+							.messageEndOfLine();
+				} else if (Global.gameTime.getHours() == 23) {
+					Global.messenger.messageNightStarts(Global.gameTime)
+							.messageEndOfLine();
+				}
+			}
 			for (int i = 0; i < players.size(); i++) {
 				players.get(i).step();
 			}
@@ -41,14 +49,15 @@ public class Game {
 			for (int i = 0; i < players.size(); i++) {
 				Player player = players.get(i);
 				if (player.getDead()) {
+					lastKill.reset();
 					players.remove(i);
 					i--;
 				}
 			}
-			if (lastKill.stepDown()) {
+			if (lastKill.isZero()) {
 				radius = (int)(0.9 * radius);
 				Global.messenger.messageGameRestricted().messageEndOfLine();
-				lastKill.set(1, 0, 0);
+				lastKill.reset();;
 			}
 			Global.messenger.flush();
 			if (players.size() == 1) {

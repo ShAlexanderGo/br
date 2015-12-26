@@ -9,7 +9,6 @@ public class Group {
 	
 	public void add(Group group) {
 		for (int i = 0; i < group.size(); i++) {
-			//System.out.println(this.getNames() + " | " + group.getNames());
 			this.add(group.get(i));
 		}
 	}
@@ -26,7 +25,6 @@ public class Group {
 			    minimum = Math.min(distance, minimum);
 			}
 		}
-		//System.out.println(this.getNames() + " | " + group.getNames() + " : " + String.valueOf(minimum));
 		return minimum;
 	}
 	

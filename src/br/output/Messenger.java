@@ -2,9 +2,9 @@ package br.output;
 
 import java.util.Scanner;
 
-import br.Clock;
 import br.Group;
 import br.Player;
+import br.time.Clock;
 
 public class Messenger {
 
@@ -35,7 +35,7 @@ public class Messenger {
 		timeStamped = false;
 	}
 	
-	public String modifyVerb(String verb, int size) {
+	private String modifyVerb(String verb, int size) {
 		if (size == 1) {
 			return verb + "s";
 		} else {
@@ -49,6 +49,16 @@ public class Messenger {
 	
 	public void setNeedToWait(boolean needToWait) {
 		this.needToWait = needToWait;
+	}
+	
+	public Messenger messageDayStarts(Clock clock) {
+		RandomMessage mess = new RandomMessage();
+		mess.add("New day starts.");
+		mess.add("New day begins.");
+		mess.add("Day " + Integer.toString(clock.getDays()) + " starts.");
+		mess.add("Day " + Integer.toString(clock.getDays()) + " begins.");
+		queue.addMessage(mess.get());
+		return this;
 	}
 	
 	public Messenger messageEndOfLine() {
@@ -74,6 +84,11 @@ public class Messenger {
 				+ killed.getNames()
 				+ ".");
 		setNeedToWait(true);
+		return this;
+	}
+	
+	public Messenger messageNightStarts(Clock clock) {
+		queue.addMessage("Night falls.");
 		return this;
 	}
 	
