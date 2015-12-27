@@ -1,12 +1,12 @@
 package br;
 
-public class Tactical {
+public class TacticPlayer {
 
 	private Player player;
 	private Integer attack;
 	
-	public static Tactical generate(Player player) {
-		return new Tactical(player);
+	public static TacticPlayer generate(Player player) {
+		return new TacticPlayer(player);
 	}
 	
 	public int getAttack() {
@@ -20,7 +20,7 @@ public class Tactical {
 		return player;
 	}
 	
-	private Tactical(Player player) {
+	private TacticPlayer(Player player) {
 		this.player = player;
 	}
 	

@@ -2,6 +2,7 @@ package br;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Group {
 	
@@ -68,21 +69,23 @@ public class Group {
 		if (players.size() <= 1)
 			return;
 		Global.messenger.messageTimeStamp();
-		ArrayList<Tactical> tacticals = new ArrayList<Tactical>();
+		ArrayList<TacticPlayer> tacticals = new ArrayList<TacticPlayer>();
 		for (Player player : players)
-			tacticals.add(Tactical.generate(player));
+			tacticals.add(TacticPlayer.generate(player));
 		int maximum = Integer.MIN_VALUE;
-		for (Tactical tactical : tacticals)
+		for (TacticPlayer tactical : tacticals)
 			maximum = Math.max(maximum, tactical.getAttack());
 		Group winners = new Group();
 		Group losers = new Group();
-		for (Tactical tactical : tacticals)
+		for (TacticPlayer tactical : tacticals)
 			if (tactical.getAttack() < maximum)
 				losers.add(tactical.getPlayer());
 			else 
 				winners.add(tactical.getPlayer());
 		for (int i = 0; i < losers.size(); i++) {
-			losers.get(i).setDead(true);
+			losers.get(i).setDead(Global.gameTime);
+			winners.get(Global.random.nextInt(winners.size())).getStatistic()
+					.increaseKills();
 		}
 		if (losers.size() != 0) {
 			Global.messenger.messangeRunInto(this)
@@ -99,10 +102,38 @@ public class Group {
 		return players.size();
 	}
 	
+	public void sortByTimeOfDeath() {
+		players.sort(new Comparator<Player>() {
+			@Override
+			public int compare(Player arg0, Player arg1) {
+				if (arg0.getDead()) {
+					if (arg1.getDead()) {
+						return arg0.getStatistic().getTimeOfDeath().getTicks()
+								- arg1.getStatistic().getTimeOfDeath().getTicks();
+					} else {
+						return -1;
+					}
+				} else {
+					if (arg1.getDead()) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			}
+		});
+	}
+	
 	public Group() {}
 	
 	public Group(Player player) {
 		players.add(player);
+	}
+	
+	public Group(Group group) {
+		for (int i = 0; i < group.size(); i++) {
+			players.add(group.get(i));
+		}
 	}
 	
 }

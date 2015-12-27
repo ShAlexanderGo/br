@@ -7,6 +7,7 @@ import br.time.Timer;
 public class Game {
 	private int radius = 10_000;
 	
+	private Group playersAll;
 	private Group players = new Group();
 	private Timer lastKill = new Timer(1, 0, 0);
 	private EncounterFinder finder = new EncounterFinder();
@@ -63,6 +64,7 @@ public class Game {
 			if (players.size() == 1) {
 				Global.messenger.messageWinsGame(players.get(0))
 						.messageEndOfLine();
+				Global.messenger.messagePrintStatictics(playersAll);
 				Global.messenger.flush();
 				return players.getNames();
 			}
@@ -81,5 +83,6 @@ public class Game {
     	players.add(new Player(this, "Anna", 2500, 2500));
     	players.add(new Player(this, "Elizabeth", -1250, 0));
     	players.add(new Player(this, "Alice", 1250, 0));
+    	playersAll = new Group(players);
     }
 }

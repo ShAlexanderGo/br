@@ -2,6 +2,8 @@ package br;
 
 import java.util.ArrayList;
 
+import br.time.Clock;
+
 public class Player {
 	
 	private final int speed = 50;
@@ -12,6 +14,7 @@ public class Player {
 	private double direction;
 	private boolean dead = false;
 	private ArrayList<Player> vicinity = new ArrayList<Player>();
+	private Statistic statistic = new Statistic();
 	
 	/**
 	 * if player is this, player won't be added.
@@ -66,8 +69,9 @@ public class Player {
 		return dead;
 	}
 	
-	public void setDead(boolean dead) {
-		this.dead = dead;
+	public void setDead(Clock time) {
+		this.dead = true;
+		this.statistic.setTimeOfDeath(new Clock(time));
 	}
 	
 	public Player setDirection(double direction) {
@@ -81,6 +85,10 @@ public class Player {
 	
 	public Vector getPosition() {
 		return position;
+	}
+	
+	public Statistic getStatistic() {
+		return statistic;
 	}
 	
 	public Player(Game game, String name, int x, int y) {

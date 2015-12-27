@@ -13,6 +13,7 @@ public class Messenger {
 	private boolean needToBeTimeStamped = false;
 	private boolean needToWait = false; 
 	private boolean verbose = true;
+	private boolean nonstop = false;
 	private Scanner scanner;
 	
 	public Messenger customMessage(String message, boolean needToWait) {
@@ -30,13 +31,14 @@ public class Messenger {
 			System.out.println(Global.gameTime.toString());
 		    needToBeTimeStamped = false;
 		}
-		if (needToWait)
+		if (needToWait && !nonstop)
 			queue.removeLast();
 		while (!queue.isEmpty()) {
 			System.out.print(queue.removeFirst());
 		}
 		if (needToWait) {
-			waitKey();
+			if (!nonstop)
+				waitKey();
 			needToWait = false;
 		}
 	}
@@ -55,6 +57,10 @@ public class Messenger {
 	
 	public void setNeedToWait(boolean needToWait) {
 		this.needToWait = needToWait;
+	}
+	
+	public void setNonstop(boolean nonstop) {
+		this.nonstop = nonstop;
 	}
 	
 	public void setVerbose(boolean verbose) {
@@ -111,6 +117,25 @@ public class Messenger {
 	public Messenger messageNotToFight() {
 		queue.addMessage("They decide not to fight.");
 		setNeedToWait(true);
+		return this;
+	}
+	
+	public Messenger messagePrintStatictics(Group group) {
+		group.sortByTimeOfDeath();
+		queue.addMessage("Statistics:");
+		this.messageEndOfLine();
+		for (int i = 0; i < group.size(); i++) {
+			Player pl = group.get(i);
+			String line = pl.getName() + " " + pl.getStatistic().getKills() 
+					+ " kills";
+			if (i == group.size() - 1) {
+				line = line + ".";
+			} else {
+				line = line + ";";
+			}
+			queue.addMessage(line);
+			this.messageEndOfLine();
+		}
 		return this;
 	}
 	

@@ -29,6 +29,10 @@ public class Clock {
     	ticks = toTicks(days, hours, minutes);
     }
     
+    public Clock(Clock clock) {
+    	this(clock.getDays(), clock.getHours(), clock.getMinutes());
+    }
+    
     public int getDays() {
     	return (ticks / HOURS_IN_DAY) / MINUTES_IN_HOUR;
     }
