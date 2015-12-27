@@ -2,6 +2,7 @@ package br.output;
 
 import java.util.Scanner;
 
+import br.Global;
 import br.Group;
 import br.Player;
 import br.time.Clock;
@@ -9,10 +10,10 @@ import br.time.Clock;
 public class Messenger {
 
 	private MessageQueue queue = new MessageQueue();
-	private boolean timeStamped = false;
+	private boolean needToBeTimeStamped = false;
 	private boolean needToWait = false; 
+	private boolean verbose = true;
 	private Scanner scanner;
-	private String lineSeparator = System.getProperty("line.separator");
 	
 	public Messenger customMessage(String message, boolean needToWait) {
 		queue.addMessage(message);
@@ -21,8 +22,14 @@ public class Messenger {
 	}
 	
 	public void flush() {
+		if (!verbose)
+			return;
 		if (queue.isEmpty())
 			return;
+		if (needToBeTimeStamped) {
+			System.out.println(Global.gameTime.toString());
+		    needToBeTimeStamped = false;
+		}
 		if (needToWait)
 			queue.removeLast();
 		while (!queue.isEmpty()) {
@@ -32,7 +39,6 @@ public class Messenger {
 			waitKey();
 			needToWait = false;
 		}
-		timeStamped = false;
 	}
 	
 	private String modifyVerb(String verb, int size) {
@@ -51,6 +57,16 @@ public class Messenger {
 		this.needToWait = needToWait;
 	}
 	
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
+	}
+	
+	public Messenger() {
+		scanner = new Scanner(System.in);
+	}
+	
+	//messages
+	
 	public Messenger messageDayStarts(Clock clock) {
 		RandomMessage mess = new RandomMessage();
 		mess.add("New day starts.");
@@ -62,7 +78,7 @@ public class Messenger {
 	}
 	
 	public Messenger messageEndOfLine() {
-		queue.addMessage(lineSeparator);
+		queue.addMessage(System.getProperty("line.separator"));
 		return this;
 	}
 	
@@ -108,21 +124,14 @@ public class Messenger {
 		return this;
 	}
 	
-	public Messenger messageTimeStamp(Clock clock) {
-		if (timeStamped)
-			return this;
-		timeStamped = true;
-		this.customMessage(clock.toString(), false).messageEndOfLine();
+	public Messenger messageTimeStamp() {
+		needToBeTimeStamped = true;
 		return this;
 	}
 	
 	public Messenger messageWinsGame(Player player) {
 		queue.addMessage("Game ends. " + player.getName() + " wins the game.");
 		return this;
-	}
-	
-	public Messenger() {
-		scanner = new Scanner(System.in);
 	}
 	
 }

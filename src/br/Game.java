@@ -18,7 +18,7 @@ public class Game {
 			return false;
 	}
 	
-	public void routine() {
+	public String routine() {
 		Group gameStart = new Group();
 		for (int i = 0; i < players.size(); i++) {
 			gameStart.add(players.get(i));
@@ -64,12 +64,13 @@ public class Game {
 				Global.messenger.messageWinsGame(players.get(0))
 						.messageEndOfLine();
 				Global.messenger.flush();
-				return;
+				return players.getNames();
 			}
 		}
 	}
 	
     public Game() {
+    	Global.initialize();
     	players.add(new Player(this, "Michael", -5000, 0));
     	players.add(new Player(this, "James", 5000, 0));
     	players.add(new Player(this, "John", 0, -5000));

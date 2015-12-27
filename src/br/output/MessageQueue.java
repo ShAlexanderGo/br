@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class MessageQueue {
 	
 	private LinkedList<String> messages = new LinkedList<String>();
-	private String lineSeparator = System.getProperty("line.separator");
+	private static String lineSeparator = System.getProperty("line.separator");
 	private final int LINE_LENGTH = 80;
 	
 	public void addMessage(String message) {

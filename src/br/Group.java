@@ -67,7 +67,7 @@ public class Group {
 	public void resolveFight() {
 		if (players.size() <= 1)
 			return;
-		Global.messenger.messageTimeStamp(Global.gameTime);
+		Global.messenger.messageTimeStamp();
 		ArrayList<Tactical> tacticals = new ArrayList<Tactical>();
 		for (Player player : players)
 			tacticals.add(Tactical.generate(player));
