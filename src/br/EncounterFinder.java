@@ -2,6 +2,8 @@ package br;
 
 import java.util.ArrayList;
 
+import br.player.Player;
+
 public class EncounterFinder {
 
 	private final int encounterDistance = 100;

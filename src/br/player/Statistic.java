@@ -1,4 +1,4 @@
-package br;
+package br.player;
 
 import br.time.Clock;
 

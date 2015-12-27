@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import br.Global;
 import br.Group;
-import br.Player;
+import br.player.Player;
 import br.time.Clock;
 
 public class Messenger {

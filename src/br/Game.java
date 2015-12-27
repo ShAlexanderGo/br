@@ -2,6 +2,8 @@ package br;
 
 import java.util.ArrayList;
 
+import br.player.Player;
+import br.player.PlayerBuilder;
 import br.time.Timer;
 
 public class Game {
@@ -73,16 +75,7 @@ public class Game {
 	
     public Game() {
     	Global.initialize();
-    	players.add(new Player(this, "Michael", -5000, 0));
-    	players.add(new Player(this, "James", 5000, 0));
-    	players.add(new Player(this, "John", 0, -5000));
-    	players.add(new Player(this, "Robert", 0, 5000));
-    	players.add(new Player(this, "William", -2500, -2500));
-    	players.add(new Player(this, "Mary", -2500, 2500));
-    	players.add(new Player(this, "Linda", 2500, -2500));
-    	players.add(new Player(this, "Anna", 2500, 2500));
-    	players.add(new Player(this, "Elizabeth", -1250, 0));
-    	players.add(new Player(this, "Alice", 1250, 0));
+    	players = new PlayerBuilder(this).get();
     	playersAll = new Group(players);
     }
 }

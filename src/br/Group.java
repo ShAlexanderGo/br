@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import br.player.Player;
+import br.player.TacticPlayer;
+
 public class Group {
 	
 	private ArrayList<Player> players = new ArrayList<Player>();

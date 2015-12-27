@@ -1,4 +1,6 @@
-package br;
+package br.player;
+
+import br.Global;
 
 public class TacticPlayer {
 

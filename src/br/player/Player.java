@@ -1,7 +1,10 @@
-package br;
+package br.player;
 
 import java.util.ArrayList;
 
+import br.Game;
+import br.Global;
+import br.Vector;
 import br.time.Clock;
 
 public class Player {
