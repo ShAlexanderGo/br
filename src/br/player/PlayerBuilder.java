@@ -37,6 +37,13 @@ public class PlayerBuilder {
 		return players;
 	}
 	
+	public PlayerBuilder faceToCenter() {
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).setDirection(0, 0);
+		}
+		return this;
+	}
+	
 	public PlayerBuilder(Game game, int number) {
 		if (number > names.size())
 			number = names.size();

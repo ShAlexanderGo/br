@@ -82,6 +82,11 @@ public class Player {
 		return this;
 	}
 	
+	public Player setDirection(int x, int y) {
+		setDirection(new Vector(x, y).subtract(position).getAngle());
+		return this;
+	}
+	
 	public String getName() {
 		return name;
 	}
