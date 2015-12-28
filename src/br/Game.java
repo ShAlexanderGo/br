@@ -22,11 +22,7 @@ public class Game {
 	}
 	
 	public String routine() {
-		Group gameStart = new Group();
-		for (int i = 0; i < players.size(); i++) {
-			gameStart.add(players.get(i));
-		}
-		Global.messenger.messageGameStart(gameStart).messageEndOfLine();
+		Global.messenger.messageGameStart(playersAll).messageEndOfLine();
 		while (true) {
 			Global.gameTime.increase();
 			lastKill.decrease();
@@ -56,6 +52,9 @@ public class Game {
 					players.remove(i);
 					i--;
 				}
+			}
+			for (int i = 0; i < players.size(); i++) {
+				players.get(i).updateVicinity(players);
 			}
 			if (lastKill.isZero()) {
 				radius = (int)(0.9 * radius);

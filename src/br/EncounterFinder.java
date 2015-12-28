@@ -2,7 +2,6 @@ package br;
 
 import java.util.ArrayList;
 
-import br.player.Player;
 
 public class EncounterFinder {
 
@@ -24,20 +23,7 @@ public class EncounterFinder {
 				}
 			}
 		}
-		updateVicinities(players);
 		return groups;
-	}
-	
-	public void updateVicinities(Group players) {
-		for (int i = 0; i < players.size(); i++) {
-			Player player1 = players.get(i);
-			player1.clearVicinity();
-			for (int j = 0; j < players.size(); j++) {
-				Player player2 = players.get(j);
-				if (player1.distanceTo(player2) < encounterDistance)
-					player1.addVicinity(player2);
-			}
-		}
 	}
 	
 	public EncounterFinder() {}

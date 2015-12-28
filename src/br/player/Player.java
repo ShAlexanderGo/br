@@ -1,50 +1,36 @@
 package br.player;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import br.Game;
 import br.Global;
+import br.Placeable;
 import br.Vector;
 import br.time.Clock;
 
-public class Player {
+public class Player extends Placeable {
 	
-	private final int speed = 50;
+	private static final int speed = 50;
 	
 	private Game game;
 	private String name;
-	private Vector position;
+	
 	private double direction;
 	private boolean dead = false;
-	private ArrayList<Player> vicinity = new ArrayList<Player>();
+	private List<Placeable> vicinity = new LinkedList<Placeable>();
 	private Statistic statistic = new Statistic();
 	
-	/**
-	 * if player is this, player won't be added.
-	 */
-	public void addVicinity(Player player) {
-		if (player.equals(this))
-			return;
-		vicinity.add(player);
-	}
-	
-	public void clearVicinity() {
+	public void updateVicinity(List<? extends Placeable> objects) {
 		vicinity.clear();
-	}
-	
-	public double distanceTo(Player player) {
-		return this.position.distanceTo(player.getPosition());
-	}
-	
-	/*
-	 * Player is not in the vicinity of itself
-	 */
-	public boolean isInVicinity(Player player) {
-		for (int i = 0; i < vicinity.size(); i++) {
-			if (vicinity.get(i).equals(player))
-				return true;
+		for (Placeable object : objects) {
+			if (this.distanceTo(object) < 100)
+				vicinity.add(object);
 		}
-		return false;
+	}
+	
+	public boolean isInVicinity(Placeable object) {
+		return vicinity.contains(object);
 	}
 	
 	private void randomDirection() {
@@ -52,20 +38,20 @@ public class Player {
 	}
 	
 	private void randomDirectionHalf() {
-		direction = new Vector(0, 0).subtract(position).getAngle()
+		direction = new Vector(0, 0).subtract(getPosition()).getAngle()
 				+ Math.toRadians(Global.random.nextInt(181)-90);
 	}
 	
-	public void step() {
-		if (game.isCloseToBoundary(position)) {
+	public void step() { 
+		if (game.isCloseToBoundary(getPosition())) {
 			
-			if (Math.abs(new Vector(0, 0).subtract(position).getAngle() - direction) 
-					> Math.toRadians(90)) {
+			if (Math.abs(new Vector(0, 0).subtract(getPosition()).getAngle() 
+					- direction) > Math.toRadians(90)) {
 				//Global.messenger.messageReachedBoundary(this).messageEndOfLine();
 				randomDirectionHalf();
 			}
 		}
-		position.addByAngle(speed, direction);
+		getPosition().addByAngle(speed, direction);
 	}
 	
 	public boolean getDead() {
@@ -83,16 +69,12 @@ public class Player {
 	}
 	
 	public Player setDirection(int x, int y) {
-		setDirection(new Vector(x, y).subtract(position).getAngle());
+		setDirection(new Vector(x, y).subtract(getPosition()).getAngle());
 		return this;
 	}
 	
 	public String getName() {
 		return name;
-	}
-	
-	public Vector getPosition() {
-		return position;
 	}
 	
 	public Statistic getStatistic() {
@@ -106,7 +88,7 @@ public class Player {
 	public Player(Game game, String name, Vector position) {
 		this.game = game;
 		this.name = name;
-		this.position = position;
+		this.setPosition(position);
 		randomDirection();
 	}
 }

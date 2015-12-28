@@ -7,18 +7,13 @@ import java.util.Comparator;
 import br.player.Player;
 import br.player.TacticPlayer;
 
-public class Group {
-	
-	private ArrayList<Player> players = new ArrayList<Player>();
+@SuppressWarnings("serial")
+public class Group extends ArrayList<Player> {
 	
 	public void add(Group group) {
 		for (int i = 0; i < group.size(); i++) {
 			this.add(group.get(i));
 		}
-	}
-	
-	public void add(Player player) {
-		players.add(player);
 	}
 	
 	public double distanceTo(Group group) {
@@ -32,21 +27,17 @@ public class Group {
 		return minimum;
 	}
 	
-	public Player get(int i) {
-		return players.get(i);
-	}
-	
 	public String getNames() {
-		if (players.size() == 0)
+		if (this.size() == 0)
 			return null;
-		if (players.size() == 1)
-			return players.get(0).getName();
-		Collections.shuffle(players);
-		String names = players.get(0).getName() 
+		if (this.size() == 1)
+			return this.get(0).getName();
+		Collections.shuffle(this);
+		String names = this.get(0).getName() 
 				+ " and " 
-				+ players.get(1).getName();
-		for (int i = 2; i < players.size(); i++) {
-			names = players.get(i).getName() + ", " + names;
+				+ this.get(1).getName();
+		for (int i = 2; i < this.size(); i++) {
+			names = this.get(i).getName() + ", " + names;
 		}
 		return names;
 	}
@@ -64,16 +55,12 @@ public class Group {
 		return true;
 	}
 	
-	public void remove(int i) {
-		players.remove(i);
-	}
-	
 	public void resolveFight() {
-		if (players.size() <= 1)
+		if (this.size() <= 1)
 			return;
 		Global.messenger.messageTimeStamp();
 		ArrayList<TacticPlayer> tacticals = new ArrayList<TacticPlayer>();
-		for (Player player : players)
+		for (Player player : this)
 			tacticals.add(TacticPlayer.generate(player));
 		int maximum = Integer.MIN_VALUE;
 		for (TacticPlayer tactical : tacticals)
@@ -101,12 +88,8 @@ public class Group {
 		}
 	}
 	
-	public int size() {
-		return players.size();
-	}
-	
 	public void sortByTimeOfDeath() {
-		players.sort(new Comparator<Player>() {
+		this.sort(new Comparator<Player>() {
 			@Override
 			public int compare(Player arg0, Player arg1) {
 				if (arg0.getDead()) {
@@ -130,12 +113,12 @@ public class Group {
 	public Group() {}
 	
 	public Group(Player player) {
-		players.add(player);
+		this.add(player);
 	}
 	
 	public Group(Group group) {
 		for (int i = 0; i < group.size(); i++) {
-			players.add(group.get(i));
+			this.add(group.get(i));
 		}
 	}
 	
