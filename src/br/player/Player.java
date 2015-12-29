@@ -8,6 +8,7 @@ import br.Global;
 import br.Placeable;
 import br.Vector;
 import br.time.Clock;
+import br.weapon.Weapon;
 
 public class Player extends Placeable {
 	
@@ -15,11 +16,16 @@ public class Player extends Placeable {
 	
 	private Game game;
 	private String name;
-	
+	private Weapon weapon;
 	private double direction;
 	private boolean dead = false;
 	private List<Placeable> vicinity = new LinkedList<Placeable>();
 	private Statistic statistic = new Statistic();
+	
+	public Player setWeapon(Weapon weapon) {
+		this.weapon = weapon;
+		return this;
+	}
 	
 	public void updateVicinity(List<? extends Placeable> objects) {
 		vicinity.clear();
@@ -86,9 +92,9 @@ public class Player extends Placeable {
 	}
 	
 	public Player(Game game, String name, Vector position) {
+		super(position);
 		this.game = game;
 		this.name = name;
-		this.setPosition(position);
 		randomDirection();
 	}
 }

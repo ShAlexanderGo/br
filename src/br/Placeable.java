@@ -17,4 +17,12 @@ public abstract class Placeable {
 		return this;
 	}
 	
+	public Placeable(Vector position) {
+		this.position = position;
+	}
+	
+	public Placeable() {
+		this(null);
+	}
+	
 }

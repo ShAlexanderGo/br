@@ -6,6 +6,7 @@ import br.Global;
 import br.Group;
 import br.player.Player;
 import br.time.Clock;
+import br.weapon.Weapon;
 
 public class Messenger {
 
@@ -85,6 +86,12 @@ public class Messenger {
 	
 	public Messenger messageEndOfLine() {
 		queue.addMessage(System.getProperty("line.separator"));
+		return this;
+	}
+	
+	public Messenger messageFindsItem(Player pl, Weapon w) {
+		queue.addMessage(pl.getName() + " finds " + w.getType().getName() 
+				+ ".");
 		return this;
 	}
 	

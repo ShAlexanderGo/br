@@ -1,12 +1,10 @@
 package br.weapon;
 
 public enum WeaponType {
-	//NOTHING("bare hands", 0, false),
-	KNIFE("knife", 1, true);
+	KNIFE("knife", 1);
 	
 	private String name;
 	private int attackBonus;
-	private boolean droppable;
 	
 	public String getName() {
 		return name;
@@ -16,11 +14,7 @@ public enum WeaponType {
 		return attackBonus;
 	}
 	
-	public boolean isDroppable() {
-		return droppable;
-	}
-	
-	WeaponType(String name, int attackBonus, boolean droppable) {
+	WeaponType(String name, int attackBonus) {
 		this.name = name;
 		this.attackBonus = attackBonus;
 	}
