@@ -22,6 +22,10 @@ public class Player extends Placeable {
 	private List<Placeable> vicinity = new LinkedList<Placeable>();
 	private Statistic statistic = new Statistic();
 	
+	public Weapon getWeapon() {
+		return weapon;
+	}
+	
 	public Player setWeapon(Weapon weapon) {
 		this.weapon = weapon;
 		return this;
