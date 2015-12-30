@@ -26,13 +26,14 @@ public class Global {
 			public String toString() {
 				int hours = getHours();
 				int minutes = getMinutes();
-				String timeOfDay;
+				/*String timeOfDay;
 				if ((hours >= 6) && (hours < 23)) {
 					timeOfDay = "Day";
 				} else {
 					timeOfDay = "Night";
-				}
-				return "<" + timeOfDay + " " + getDays() + " " 
+				}*/
+				return "<" /*+ timeOfDay + " "*/ 
+						+ String.format("%02d", getDays()) + " " 
 						+ String.format("%02d", hours) + ":" 
 						+ String.format("%02d", minutes) + ">";
 			}

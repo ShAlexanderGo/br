@@ -44,6 +44,11 @@ public class Messenger {
 		}
 	}
 	
+	//TODO
+	private String article(String noun) {
+		return "a " + noun;
+	}
+	
 	private String modifyVerb(String verb, int size) {
 		if (size == 1) {
 			return verb + "s";
@@ -90,8 +95,8 @@ public class Messenger {
 	}
 	
 	public Messenger messageFindsItem(Player pl, Weapon w) {
-		queue.addMessage(pl.getName() + " finds " + w.getType().getName() 
-				+ ".");
+		queue.addMessage(pl.getName() + " finds " 
+				+ article(w.getType().getName()) + ".");
 		return this;
 	}
 	
@@ -106,12 +111,25 @@ public class Messenger {
 	}
 	
 	public Messenger messageKill(Group killer, Group killed) {
-		queue.addMessage(killer.getNames() 
+		RandomMessage mess = new RandomMessage();
+		mess.add(killer.getNames() 
 				+ " " 
 				+ modifyVerb("kill", killer.size())
 				+ " "
 				+ killed.getNames()
 				+ ".");
+		if ((killer.size() == 1) && (killer.get(0).getWeapon() != null)) {
+			String weapon = killer.get(0).getWeapon().getType().getName();
+			weapon = article(weapon);
+			mess.add(killer.getNames() + " uses " + weapon + " to kill " 
+					+ killed.getNames());
+			mess.add(killer.getNames() + " kills " + killed.getNames() 
+					+ " with " + weapon + ".");
+			mess.add(killer.getNames() + " kills " + killed.getNames() 
+					+ " using " + weapon + ".");
+			
+		}
+		queue.addMessage(mess.get());
 		setNeedToWait(true);
 		return this;
 	}
@@ -151,7 +169,7 @@ public class Messenger {
 		return this;
 	}
 	
-	public Messenger messangeRunInto(Group group) {
+	public Messenger messageRunInto(Group group) {
 		queue.addMessage(group.getNames() + " run into each other.");
 		return this;
 	}

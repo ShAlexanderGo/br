@@ -77,13 +77,20 @@ public class Group extends ArrayList<Player> {
 			winners.get(Global.random.nextInt(winners.size())).getStatistic()
 					.increaseKills();
 		}
+		Global.messenger.messageRunInto(this);
 		if (losers.size() != 0) {
-			Global.messenger.messangeRunInto(this)
-					.messageKill(winners, losers)
-					.messageEndOfLine();
+			ArrayList<Group> list = new ArrayList<Group>();
+			for (int i = 0; i < winners.size(); i++)
+				list.add(new Group());
+			for (int i = 0; i < losers.size(); i++)
+				list.get(Global.random.nextInt(list.size()))
+						.add(losers.get(i));
+			for (int i = 0; i < list.size(); i++) {
+				Global.messenger.messageKill(new Group(winners.get(i)), list.get(i));
+			}
+			Global.messenger.messageEndOfLine();
 		} else {
-			Global.messenger.messangeRunInto(this)
-					.messageNotToFight()
+			Global.messenger.messageNotToFight()
 					.messageEndOfLine();
 		}
 	}
