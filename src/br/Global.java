@@ -1,5 +1,6 @@
 package br;
 
+import java.util.List;
 import java.util.Random;
 
 import br.output.Messenger;
@@ -12,6 +13,12 @@ public class Global {
 	public static Messenger messenger;
 	
 	public static Clock gameTime;
+	
+	public static <T> T randomElement(List<? extends T> list) {
+		if (list.size() == 0)
+			return null;
+		return list.get(random.nextInt(list.size()));
+	}
 	
 	public static void initialize() {
 		random = new Random();

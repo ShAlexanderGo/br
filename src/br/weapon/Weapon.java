@@ -7,6 +7,10 @@ public class Weapon extends Placeable {
 	
 	private WeaponType type;
 	
+	public int getAttackBonus() {
+		return type.getAttackBonus();
+	}
+	
 	public WeaponType getType() {
 		return type;
 	}

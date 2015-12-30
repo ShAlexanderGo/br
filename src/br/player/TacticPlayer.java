@@ -20,7 +20,7 @@ public class TacticPlayer {
 	
 	public int getAttack() {
 		if (attack == null) {
-			int bonus = weapon == null ? 0 : weapon.getType().getAttackBonus();
+			int bonus = weapon == null ? 0 : weapon.getAttackBonus();
 			attack = Global.random.nextInt(2 + bonus);
 		}
 		return attack;

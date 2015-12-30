@@ -1,6 +1,7 @@
 package br;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -71,7 +72,11 @@ public class Game {
 				int i = Global.random.nextInt(group.size());
 				Player pl = group.get(i);
 				weapon.setPosition(null);
-				pl.setWeapon(weapon);
+				Weapon curWeapon = pl.getWeapon();
+				if ((curWeapon == null) || (curWeapon.getAttackBonus()	
+						< weapon.getAttackBonus())) {
+					pl.setWeapon(weapon);
+				}
 				Global.messenger.messageFindsItem(pl, weapon)
 						.messageEndOfLine();
 			}
@@ -103,10 +108,11 @@ public class Game {
     	Global.initialize();
     	players = new PlayerBuilder(this, 10).get();
     	playersAll = new Group(players);
-    	for (int i = 0; i < 10; i++) {
+    	for (int i = 0; i < 20; i++) {
     		int length = Global.random.nextInt(radius);
     		double angle = Global.random.nextDouble() * Math.toRadians(360);
-    		weapons.add(new Weapon(WeaponType.KNIFE, 
+    		WeaponType weapon = Global.randomElement(Arrays.asList(WeaponType.values()));
+    		weapons.add(new Weapon(weapon, 
     				new Vector().addByAngle(length, angle)));
     	}
     }

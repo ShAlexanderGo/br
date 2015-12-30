@@ -46,7 +46,15 @@ public class Messenger {
 	
 	//TODO
 	private String article(String noun) {
-		return "a " + noun;
+		switch (noun.charAt(0)) {
+		case 'a':
+			noun = "an " + noun;
+			break;
+		default:
+			noun = "a " + noun;
+			break;
+		}
+		return noun;
 	}
 	
 	private String modifyVerb(String verb, int size) {
