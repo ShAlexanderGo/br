@@ -58,7 +58,6 @@ public class Group extends ArrayList<Player> {
 	public void resolveFight() {
 		if (this.size() <= 1)
 			return;
-		Global.messenger.messageTimeStamp();
 		ArrayList<TacticPlayer> tacticals = new ArrayList<TacticPlayer>();
 		for (Player player : this)
 			tacticals.add(TacticPlayer.generate(player));

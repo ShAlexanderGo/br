@@ -29,6 +29,7 @@ public class Game {
 	
 	public String routine() {
 		Global.messenger.messageGameStart(playersAll).messageEndOfLine();
+		lastKill.increase(); //для ровного счета
 		while (true) {
 			Global.gameTime.increase();
 			lastKill.decrease();
@@ -71,8 +72,8 @@ public class Game {
 				Player pl = group.get(i);
 				weapon.setPosition(null);
 				pl.setWeapon(weapon);
-				Global.messenger.messageTimeStamp()
-						.messageFindsItem(pl, weapon).messageEndOfLine();
+				Global.messenger.messageFindsItem(pl, weapon)
+						.messageEndOfLine();
 			}
 			ListIterator<Weapon> it = weapons.listIterator();
 			while (it.hasNext()) {
@@ -100,7 +101,7 @@ public class Game {
 	
     public Game() {
     	Global.initialize();
-    	players = new PlayerBuilder(this).get();
+    	players = new PlayerBuilder(this, 10).get();
     	playersAll = new Group(players);
     	for (int i = 0; i < 10; i++) {
     		int length = Global.random.nextInt(radius);

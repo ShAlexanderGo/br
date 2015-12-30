@@ -11,7 +11,6 @@ import br.weapon.Weapon;
 public class Messenger {
 
 	private MessageQueue queue = new MessageQueue();
-	private boolean needToBeTimeStamped = false;
 	private boolean needToWait = false; 
 	private boolean verbose = true;
 	private boolean nonstop = false;
@@ -28,14 +27,15 @@ public class Messenger {
 			return;
 		if (queue.isEmpty())
 			return;
-		if (needToBeTimeStamped) {
-			System.out.println(Global.gameTime.toString());
-		    needToBeTimeStamped = false;
-		}
+		System.out.print(Global.gameTime.toString() + " ");
 		if (needToWait && !nonstop)
 			queue.removeLast();
 		while (!queue.isEmpty()) {
-			System.out.print(queue.removeFirst());
+			String m = queue.removeFirst();
+			System.out.print(m);
+			if (m.equals(queue.getSep()) && !queue.isEmpty()) {
+				System.out.print("           ");
+			}
 		}
 		if (needToWait) {
 			if (!nonstop)
@@ -111,6 +111,8 @@ public class Messenger {
 	}
 	
 	public Messenger messageKill(Group killer, Group killed) {
+		if (killed.isEmpty())
+			return this;
 		RandomMessage mess = new RandomMessage();
 		mess.add(killer.getNames() 
 				+ " " 
@@ -122,7 +124,7 @@ public class Messenger {
 			String weapon = killer.get(0).getWeapon().getType().getName();
 			weapon = article(weapon);
 			mess.add(killer.getNames() + " uses " + weapon + " to kill " 
-					+ killed.getNames());
+					+ killed.getNames() + ".");
 			mess.add(killer.getNames() + " kills " + killed.getNames() 
 					+ " with " + weapon + ".");
 			mess.add(killer.getNames() + " kills " + killed.getNames() 
@@ -171,11 +173,6 @@ public class Messenger {
 	
 	public Messenger messageRunInto(Group group) {
 		queue.addMessage(group.getNames() + " run into each other.");
-		return this;
-	}
-	
-	public Messenger messageTimeStamp() {
-		needToBeTimeStamped = true;
 		return this;
 	}
 	

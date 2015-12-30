@@ -45,4 +45,8 @@ public class MessageQueue {
 		return messages.removeLast();
 	}
 	
+	public String getSep() {
+		return lineSeparator;
+	}
+	
 }
