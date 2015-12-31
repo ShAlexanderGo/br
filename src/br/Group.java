@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import br.player.Player;
-import br.player.TacticPlayer;
 
 @SuppressWarnings("serial")
 public class Group extends ArrayList<Player> {
@@ -53,45 +52,6 @@ public class Group extends ArrayList<Player> {
 			}
 		}
 		return true;
-	}
-	
-	public void resolveFight() {
-		if (this.size() <= 1)
-			return;
-		ArrayList<TacticPlayer> tacticals = new ArrayList<TacticPlayer>();
-		for (Player player : this)
-			tacticals.add(TacticPlayer.generate(player));
-		int maximum = Integer.MIN_VALUE;
-		for (TacticPlayer tactical : tacticals)
-			maximum = Math.max(maximum, tactical.getAttack());
-		Group winners = new Group();
-		Group losers = new Group();
-		for (TacticPlayer tactical : tacticals)
-			if (tactical.getAttack() < maximum)
-				losers.add(tactical.getPlayer());
-			else 
-				winners.add(tactical.getPlayer());
-		for (int i = 0; i < losers.size(); i++) {
-			losers.get(i).setDead(Global.gameTime);
-			winners.get(Global.random.nextInt(winners.size())).getStatistic()
-					.increaseKills();
-		}
-		Global.messenger.messageRunInto(this);
-		if (losers.size() != 0) {
-			ArrayList<Group> list = new ArrayList<Group>();
-			for (int i = 0; i < winners.size(); i++)
-				list.add(new Group());
-			for (int i = 0; i < losers.size(); i++)
-				list.get(Global.random.nextInt(list.size()))
-						.add(losers.get(i));
-			for (int i = 0; i < list.size(); i++) {
-				Global.messenger.messageKill(new Group(winners.get(i)), list.get(i));
-			}
-			Global.messenger.messageEndOfLine();
-		} else {
-			Global.messenger.messageNotToFight()
-					.messageEndOfLine();
-		}
 	}
 	
 	public void sortByTimeOfDeath() {

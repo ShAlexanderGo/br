@@ -21,12 +21,20 @@ public class Clock {
 			ticks = 0;
 	}
 	
+	public void step() {
+		increase();
+	}
+    
+    public void setTime(int days, int hours, int minutes) {
+    	ticks = toTicks(days, hours, minutes);
+    }
+    
     public Clock() {
     	this(0, 0, 0);
     }
     
     public Clock(int days, int hours, int minutes) {
-    	ticks = toTicks(days, hours, minutes);
+    	setTime(days, hours, minutes);
     }
     
     public Clock(Clock clock) {

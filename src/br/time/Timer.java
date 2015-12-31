@@ -4,6 +4,11 @@ public class Timer extends Clock {
 
 	private int startTicks;
 	
+	@Override
+	public void step() {
+		decrease();
+	}
+	
 	public boolean isZero() {
 		if (this.getTicks() == 0)
 			return true;

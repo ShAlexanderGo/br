@@ -2,6 +2,7 @@ package br.player;
 
 import br.Global;
 import br.weapon.Weapon;
+import br.weapon.WeaponType;
 
 public class TacticPlayer {
 
@@ -21,7 +22,7 @@ public class TacticPlayer {
 	public int getAttack() {
 		if (attack == null) {
 			int bonus = weapon == null ? 0 : weapon.getAttackBonus();
-			attack = Global.random.nextInt(2 + bonus);
+			attack = Global.random.nextInt(WeaponType.basicAttack + bonus);
 		}
 		return attack;
 	}

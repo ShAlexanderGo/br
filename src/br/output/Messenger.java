@@ -16,11 +16,11 @@ public class Messenger {
 	private boolean nonstop = false;
 	private Scanner scanner;
 	
-	public Messenger customMessage(String message, boolean needToWait) {
+	/*public Messenger customMessage(String message, boolean needToWait) {
 		queue.addMessage(message);
 		setNeedToWait(needToWait);
 		return this;
-	}
+	}*/
 	
 	public void flush() {
 		if (!verbose)
@@ -44,7 +44,6 @@ public class Messenger {
 		}
 	}
 	
-	//TODO
 	private String article(String noun) {
 		switch (noun.charAt(0)) {
 		case 'a':
@@ -65,7 +64,7 @@ public class Messenger {
 		}
 	}
 	
-	public void waitKey() {
+	private void waitKey() {
 		scanner.nextLine();
 	}
 	
@@ -103,13 +102,20 @@ public class Messenger {
 	}
 	
 	public Messenger messageFindsItem(Player pl, Weapon w) {
-		queue.addMessage(pl.getName() + " finds " 
-				+ article(w.getType().getName()) + ".");
+		String name = pl.getName();
+		String weapon = article(w.getType().getName());
+		RandomMessage mess = new RandomMessage();
+		mess.add(name + " finds " + weapon + ".");
+		mess.add(name + " picks up " + weapon + ".");
+		queue.addMessage(mess.get());
 		return this;
 	}
 	
 	public Messenger messageGameRestricted() {
-		queue.addMessage("Game is restricted to smaller area.");
+		RandomMessage mess = new RandomMessage();
+		mess.add("The game is restricted to smaller area.");
+		mess.add("The game is now restricted to smaller area.");
+		queue.addMessage(mess.get());
 		return this;
 	}
 	
@@ -145,12 +151,21 @@ public class Messenger {
 	}
 	
 	public Messenger messageNightStarts(Clock clock) {
-		queue.addMessage("Night falls.");
+		/*
+		 * Night came on.
+		 */
+		RandomMessage mess = new RandomMessage();
+		mess.add("Night falls.");
+		mess.add("Night draws nigh.");
+		queue.addMessage(mess.get());
 		return this;
 	}
 	
 	public Messenger messageNotToFight() {
-		queue.addMessage("They decide not to fight.");
+		RandomMessage mess = new RandomMessage();
+		mess.add("They decide not to fight.");
+		mess.add("They avoid encounter.");
+		queue.addMessage(mess.get());
 		setNeedToWait(true);
 		return this;
 	}
@@ -180,7 +195,13 @@ public class Messenger {
 	}
 	
 	public Messenger messageRunInto(Group group) {
-		queue.addMessage(group.getNames() + " run into each other.");
+		RandomMessage mess = new RandomMessage();
+		mess.add(group.getNames() + " run into each other.");
+		if (group.size() == 2) {
+			mess.add(group.get(0).getName() + " encounters " 
+					+ group.get(1).getName() + ".");
+		}
+		queue.addMessage(mess.get());
 		return this;
 	}
 	

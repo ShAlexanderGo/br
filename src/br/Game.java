@@ -1,6 +1,5 @@
 package br;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,27 +31,11 @@ public class Game {
 		Global.messenger.messageGameStart(playersAll).messageEndOfLine();
 		lastKill.increase(); //для ровного счета
 		while (true) {
-			Global.gameTime.increase();
-			lastKill.decrease();
-			if ((Global.gameTime.getHours() == 0)
-					&& (Global.gameTime.getMinutes() == 0))
-				Global.messenger.setNeedToWait(true);
-			if (Global.gameTime.getMinutes() == 0) {
-				if (Global.gameTime.getHours() == 6) {
-					Global.messenger.messageDayStarts(Global.gameTime)
-							.messageEndOfLine();
-				} else if (Global.gameTime.getHours() == 23) {
-					Global.messenger.messageNightStarts(Global.gameTime)
-							.messageEndOfLine();
-				}
-			}
-			for (int i = 0; i < players.size(); i++) {
-				players.get(i).step();
-			}
-			ArrayList<Group> groups = finder.find(players);
-			for (int i = 0; i < groups.size(); i++) {
-				groups.get(i).resolveFight();
-			}
+			Global.gameTime.step();
+			lastKill.step();
+			players.forEach(pl -> pl.step());
+			List<Group> groups = finder.find(players);
+			groups.forEach(gr -> finder.resolveFight(gr));
 			for (int i = 0; i < players.size(); i++) {
 				Player player = players.get(i);
 				if (player.getDead()) {
@@ -69,8 +52,7 @@ public class Game {
 				}
 				if (group.isEmpty())
 					continue;
-				int i = Global.random.nextInt(group.size());
-				Player pl = group.get(i);
+				Player pl = Global.randomElement(group);
 				weapon.setPosition(null);
 				Weapon curWeapon = pl.getWeapon();
 				if ((curWeapon == null) || (curWeapon.getAttackBonus()	
@@ -82,12 +64,12 @@ public class Game {
 			}
 			ListIterator<Weapon> it = weapons.listIterator();
 			while (it.hasNext()) {
-				if (it.next().getPosition() == null)
+				Weapon w = it.next();
+				if ((w.getPosition() == null) 
+						|| (w.getPosition().getLength() > radius))
 					it.remove();
 			}
-			for (int i = 0; i < players.size(); i++) {
-				players.get(i).updateVicinity(players);
-			}
+			players.forEach(pl -> pl.updateVicinity(players));
 			if (lastKill.isZero()) {
 				radius = (int)(0.9 * radius);
 				Global.messenger.messageGameRestricted().messageEndOfLine();

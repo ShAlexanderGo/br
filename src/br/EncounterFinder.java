@@ -1,6 +1,11 @@
 package br;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import br.player.Player;
+import br.player.TacticPlayer;
 
 
 public class EncounterFinder {
@@ -9,8 +14,8 @@ public class EncounterFinder {
 	
 	public ArrayList<Group> find(Group players) {
 		ArrayList<Group> groups = new ArrayList<Group>();
-		for (int i = 0; i < players.size(); i++)
-			groups.add(new Group(players.get(i)));
+		for (Player pl : players)
+			groups.add(new Group(pl));
 		for (int i = 0; i < groups.size(); i++) {
 			Group group1 = groups.get(i);
 			for (int j = i + 1; j < groups.size(); j++) {
@@ -24,6 +29,58 @@ public class EncounterFinder {
 			}
 		}
 		return groups;
+	}
+	
+
+	public void resolveFight(Group group) {
+		if (group.size() <= 1)
+			return;
+		ArrayList<TacticPlayer> tacticals = new ArrayList<TacticPlayer>();
+		for (Player player : group)
+			tacticals.add(TacticPlayer.generate(player));
+		int maximum = Integer.MIN_VALUE;
+		for (TacticPlayer tactical : tacticals) {
+			int attack = tactical.getAttack();
+			if (attack > maximum)
+				maximum = attack;
+		}
+		Group winners = new Group();
+		Group losers = new Group();
+		for (TacticPlayer tactical : tacticals)
+			if (tactical.getAttack() < maximum)
+				losers.add(tactical.getPlayer());
+			else 
+				winners.add(tactical.getPlayer());
+		/*for (Player pl : losers) {
+			pl.setDead(Global.gameTime);
+			
+		}*/
+		/*for (int i = 0; i < losers.size(); i++) {
+			losers.get(i).setDead(Global.gameTime);
+			winners.get(Global.random.nextInt(winners.size())).getStatistic()
+					.increaseKills();
+		}*/
+		Global.messenger.messageRunInto(group);
+		if (losers.size() == 0) {
+			Global.messenger.messageNotToFight()
+			.messageEndOfLine();
+			return;
+		}
+		Map<Player, Group> map = new HashMap<Player, Group>();
+		for (Player loser : losers) {
+			loser.setDead(Global.gameTime);
+			Player winner = Global.randomElement(winners);
+			winner.getStatistic().increaseKills();
+			if (map.containsKey(winner)) {
+				map.get(winner).add(loser);
+			} else {
+				map.put(winner, new Group(loser));
+			}
+		}
+		for (Map.Entry<Player, Group> entry : map.entrySet())
+			Global.messenger
+					.messageKill(new Group(entry.getKey()), entry.getValue());
+		Global.messenger.messageEndOfLine();
 	}
 	
 	public EncounterFinder() {}
