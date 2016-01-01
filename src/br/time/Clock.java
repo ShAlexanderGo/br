@@ -57,8 +57,12 @@ public class Clock {
 		return ticks;
 	}
 
-	protected void setTicks(int ticks) {
+	public void setTicks(int ticks) {
 		this.ticks = ticks;
+	}
+	
+	public void setTicks(double ticks) {
+		setTicks((int)ticks);
 	}
 	
 }

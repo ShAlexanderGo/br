@@ -25,4 +25,8 @@ public class Timer extends Clock {
 		startTicks = toTicks(days, hours, minutes);
 	}
 	
+	public Timer() {
+		super();
+	}
+	
 }

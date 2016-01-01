@@ -4,11 +4,14 @@ import java.util.LinkedList;
 
 public class MessageQueue {
 	
+	private boolean ignore = false;
 	private LinkedList<String> messages = new LinkedList<String>();
 	private static String lineSeparator = System.getProperty("line.separator");
 	private final int LINE_LENGTH = 80;
 	
 	public void addMessage(String message) {
+		if (ignore)
+			return;
 		if (!messages.isEmpty())
 			if (!messages.getLast().equals(lineSeparator) 
 					&& !message.equals(lineSeparator))
@@ -47,6 +50,10 @@ public class MessageQueue {
 	
 	public String getSep() {
 		return lineSeparator;
+	}
+	
+	public void setIgnore(boolean ignore) {
+		this.ignore = ignore;
 	}
 	
 }

@@ -51,15 +51,6 @@ public class EncounterFinder {
 				losers.add(tactical.getPlayer());
 			else 
 				winners.add(tactical.getPlayer());
-		/*for (Player pl : losers) {
-			pl.setDead(Global.gameTime);
-			
-		}*/
-		/*for (int i = 0; i < losers.size(); i++) {
-			losers.get(i).setDead(Global.gameTime);
-			winners.get(Global.random.nextInt(winners.size())).getStatistic()
-					.increaseKills();
-		}*/
 		Global.messenger.messageRunInto(group);
 		if (losers.size() == 0) {
 			Global.messenger.messageNotToFight()

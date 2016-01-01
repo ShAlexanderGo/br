@@ -9,9 +9,15 @@ public class TacticPlayer {
 	private Player player;
 	private Integer attack;
 	private Weapon weapon;
+	private double multiplier;
 	
 	public static TacticPlayer generate(Player pl) {
-		return new TacticPlayer(pl).setWeapon(pl.getWeapon());
+		double multiplier = 1.0;
+		if (pl.getStatus().equals(PlayerStatus.SLEEPING))
+			multiplier = 0.5;
+		return new TacticPlayer(pl)
+				.setWeapon(pl.getWeapon())
+				.setMultiplier(multiplier);
 	}
 	
 	public TacticPlayer setWeapon(Weapon weapon) {
@@ -19,10 +25,17 @@ public class TacticPlayer {
 		return this;
 	}
 	
+	public TacticPlayer setMultiplier(double multiplier) {
+		this.multiplier = multiplier;
+		return this;
+	}
+	
 	public int getAttack() {
 		if (attack == null) {
 			int bonus = weapon == null ? 0 : weapon.getAttackBonus();
-			attack = Global.random.nextInt(WeaponType.basicAttack + bonus);
+			int maxAttack = (int)((WeaponType.basicAttack + bonus) 
+					* multiplier);
+			attack = Global.random.nextInt(maxAttack);
 		}
 		return attack;
 	}

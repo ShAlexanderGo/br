@@ -48,6 +48,14 @@ public class Global {
 		return list.get(random.nextInt(list.size()));
 	}
 	
+	public static double randomDouble(double lower, double upper) {
+		return lower + (upper - lower)*random.nextDouble();
+	}
+	
+	public static boolean rollDice(int percentage) {
+		return percentage > random.nextInt(100);
+	}
+	
 	public static void initialize() {
 		random = new Random();
 		messenger = new Messenger();

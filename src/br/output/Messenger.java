@@ -98,6 +98,7 @@ public class Messenger {
 	
 	public Messenger messageEndOfLine() {
 		queue.addMessage(System.getProperty("line.separator"));
+		queue.setIgnore(false);
 		return this;
 	}
 	
@@ -205,7 +206,21 @@ public class Messenger {
 		return this;
 	}
 	
+	public Messenger messageSleep(Player pl) {
+		queue.addMessage(pl.getName() + " goes to sleep.");
+		return this;
+	}
+	
+	public Messenger messageWake(Player pl) {
+		if (Global.rollDice(100))
+			queue.setIgnore(true);
+		queue.addMessage(pl.getName() + " wakes up.");
+		return this;
+	}
+	
 	public Messenger messageWinsGame(Player player) {
+		if (Global.rollDice(100))
+			queue.setIgnore(true);
 		queue.addMessage("Game ends. " + player.getName() + " wins the game.");
 		return this;
 	}
