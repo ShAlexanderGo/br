@@ -1,8 +1,8 @@
 package br;
 
-public class Vector {
-	private int x;
-	private int y;
+public final class Vector {
+	private final int x;
+	private final int y;
 	
 	public double getAngle() {
 		return Math.atan2(y, x);
@@ -13,27 +13,20 @@ public class Vector {
 	}
 	
 	public double distanceTo(Vector vector) {
-		return Math.sqrt(
-				Math.pow(this.getX() - vector.getX(), 2) 
-				+ Math.pow(this.getY() - vector.getY(), 2));
+		return this.subtract(vector).getLength();
 	}
 	
 	public Vector addByAngle(int length, double angle) {
-		x += length * Math.cos(angle);
-		y += length * Math.sin(angle);
-		return this;
+		return new Vector(x + length * Math.cos(angle),	
+				y + length * Math.sin(angle));
 	}
 	
 	public Vector add(Vector vector) {
-		x += vector.getX();
-		y += vector.getY();
-		return this;
+		return new Vector(x + vector.getX(), y + vector.getY());
 	}
 	
 	public Vector subtract(Vector vector) {
-		x -= vector.getX();
-		y -= vector.getY();
-		return this;
+		return new Vector(x - vector.getX(), y - vector.getY());
 	}
 	
 	public int getX() {
@@ -55,6 +48,10 @@ public class Vector {
 	
 	public Vector(Vector vector) {
 		this(vector.getX(), vector.getY());
+	}
+
+	public Vector(double x, double y) {
+		this((int)x, (int)y);
 	}
 	
 }

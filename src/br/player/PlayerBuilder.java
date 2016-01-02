@@ -2,15 +2,15 @@ package br.player;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import br.Game;
 import br.Global;
-import br.Group;
 
 public class PlayerBuilder {
 
-	private Group players = new Group();
+	private List<Player> players = new LinkedList<Player>();
 	
 	private static final List<String> names = Arrays.asList(
 			"Albert", "Alice", "Anna", "Annie", "Arthur", "Barbara", "Bertha",
@@ -33,7 +33,7 @@ public class PlayerBuilder {
 			"Walter", "William"
 	);
 	
-	public Group get() {
+	public List<Player> get() {
 		return players;
 	}
 	

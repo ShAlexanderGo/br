@@ -1,5 +1,6 @@
 package br;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +15,8 @@ import br.weapon.WeaponType;
 public class Game {
 	private int radius = 10_000;
 	
-	private Group playersAll;
-	private Group players = new Group();
+	private List<Player> playersAll;
+	private List<Player> players = new ArrayList<Player>();
 	private List<Weapon> weapons = new LinkedList<Weapon>();
 	private Timer lastKill = new Timer(1, 0, 0);
 	private EncounterFinder finder = new EncounterFinder();
@@ -34,8 +35,7 @@ public class Game {
 			Global.gameTime.step();
 			lastKill.step();
 			players.forEach(pl -> pl.step());
-			List<Group> groups = finder.find(players);
-			groups.forEach(gr -> finder.resolveFight(gr));
+			finder.resolveCollisions(players);
 			for (int i = 0; i < players.size(); i++) {
 				Player player = players.get(i);
 				if (player.getDead()) {
@@ -44,30 +44,14 @@ public class Game {
 					i--;
 				}
 			}
-			for (Weapon weapon : weapons) {
-				Group group = new Group();
-				for (Player pl : players) {
-					if (pl.distanceTo(weapon) < 50)
-						group.add(pl);
-				}
-				if (group.isEmpty())
-					continue;
-				Player pl = Global.randomElement(group);
-				weapon.setPosition(null);
-				Weapon curWeapon = pl.getWeapon();
-				if ((curWeapon == null) || (curWeapon.getAttackBonus()	
-						< weapon.getAttackBonus())) {
-					pl.setWeapon(weapon);
-				}
-				Global.messenger.messageFindsItem(pl, weapon)
-						.messageEndOfLine();
-			}
+			finder.resolveCollisions(players, weapons);
 			ListIterator<Weapon> it = weapons.listIterator();
 			while (it.hasNext()) {
 				Weapon w = it.next();
 				if ((w.getPosition() == null) 
-						|| (w.getPosition().getLength() > radius))
+						|| (w.distanceTo(0, 0) > radius)) {
 					it.remove();
+				}
 			}
 			players.forEach(pl -> pl.updateVicinity(players));
 			if (lastKill.isZero()) {
@@ -81,7 +65,7 @@ public class Game {
 						.messageEndOfLine();
 				Global.messenger.messagePrintStatictics(playersAll);
 				Global.messenger.flush();
-				return players.getNames();
+				return players.get(0).getName();
 			}
 		}
 	}
@@ -89,7 +73,7 @@ public class Game {
     public Game() {
     	Global.initialize();
     	players = new PlayerBuilder(this, 10).get();
-    	playersAll = new Group(players);
+    	playersAll = new ArrayList<Player>(players);
     	for (int i = 0; i < 20; i++) {
     		int length = Global.random.nextInt(radius);
     		double angle = Global.random.nextDouble() * Math.toRadians(360);

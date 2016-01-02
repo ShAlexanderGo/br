@@ -60,6 +60,7 @@ public class Player extends Placeable {
 	}
 	
 	private void randomDirectionHalf() {
+		//TODO
 		direction = new Vector(0, 0).subtract(getPosition()).getAngle()
 				+ Math.toRadians(Global.random.nextInt(181)-90);
 	}
@@ -85,12 +86,15 @@ public class Player extends Placeable {
 				sleepTimer.setTicks(
 						Global.randomDouble(0.4, 0.6)*sleepyness);
 			}
+			//TODO
 			if ((game.isCloseToBoundary(getPosition()) 
+					//TODO
 					&& (Math.abs(new Vector(0, 0).subtract(getPosition())
 							.getAngle() - direction) > Math.toRadians(90)))) {
 				randomDirectionHalf();
 			}
-			getPosition().addByAngle(speed, direction);
+			//TODO
+			this.move(speed, direction);
 			break;
 		}
 	}
@@ -100,6 +104,7 @@ public class Player extends Placeable {
 	}
 	
 	public void setDead(Clock time) {
+		this.setPosition(null);
 		this.dead = true;
 		this.statistic.setTimeOfDeath(new Clock(time));
 	}
@@ -110,6 +115,7 @@ public class Player extends Placeable {
 	}
 	
 	public Player setDirection(int x, int y) {
+		//TODO
 		setDirection(new Vector(x, y).subtract(getPosition()).getAngle());
 		return this;
 	}

@@ -1,9 +1,10 @@
 package br.output;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 import br.Global;
-import br.Group;
 import br.player.Player;
 import br.time.Clock;
 import br.weapon.Weapon;
@@ -56,6 +57,7 @@ public class Messenger {
 		return noun;
 	}
 	
+	@SuppressWarnings("unused")
 	private String modifyVerb(String verb, int size) {
 		if (size == 1) {
 			return verb + "s";
@@ -120,31 +122,36 @@ public class Messenger {
 		return this;
 	}
 	
-	public Messenger messageGameStart(Group group) {
-		queue.addMessage("The game starts. The players are: " + group.getNames() + ".");
+	public Messenger messageGameStart(List<Player> players) {
+		if (players.size() == 0) {
+			queue.setIgnore(true);
+			return this;
+		}
+		String names = "";
+		if (players.size() == 1)
+			names = players.get(0).getName();
+		else {
+			int i;
+			for (i = 0; i < players.size() - 1; i++)
+				names = names + players.get(i).getName() + " ";
+			names = names + "and " + players.get(i).getName();
+		}
+		queue.addMessage("The game starts. The players are: " + names + ".");
 		return this;
 	}
 	
-	public Messenger messageKill(Group killer, Group killed) {
-		if (killed.isEmpty())
-			return this;
+	public Messenger messageKill(Player killer, Player killed) {
 		RandomMessage mess = new RandomMessage();
-		mess.add(killer.getNames() 
-				+ " " 
-				+ modifyVerb("kill", killer.size())
-				+ " "
-				+ killed.getNames()
-				+ ".");
-		if ((killer.size() == 1) && (killer.get(0).getWeapon() != null)) {
-			String weapon = killer.get(0).getWeapon().getType().getName();
+		mess.add(killer.getName() + " kills " + killed.getName() + ".");
+		if (killer.getWeapon() != null) {
+			String weapon = killer.getWeapon().getType().getName();
 			weapon = article(weapon);
-			mess.add(killer.getNames() + " uses " + weapon + " to kill " 
-					+ killed.getNames() + ".");
-			mess.add(killer.getNames() + " kills " + killed.getNames() 
+			mess.add(killer.getName() + " uses " + weapon + " to kill " 
+					+ killed.getName() + ".");
+			mess.add(killer.getName() + " kills " + killed.getName() 
 					+ " with " + weapon + ".");
-			mess.add(killer.getNames() + " kills " + killed.getNames() 
-					+ " using " + weapon + ".");
-			
+			mess.add(killer.getName() + " kills " + killed.getName() 
+					+ " using " + weapon + ".");		
 		}
 		queue.addMessage(mess.get());
 		setNeedToWait(true);
@@ -171,15 +178,33 @@ public class Messenger {
 		return this;
 	}
 	
-	public Messenger messagePrintStatictics(Group group) {
-		group.sortByTimeOfDeath();
+	public Messenger messagePrintStatictics(List<Player> players) {
+		players.sort(new Comparator<Player>() {
+			@Override
+			public int compare(Player arg0, Player arg1) {
+				if (arg0.getDead()) {
+					if (arg1.getDead()) {
+						return arg0.getStatistic().getTimeOfDeath().getTicks()
+								- arg1.getStatistic().getTimeOfDeath().getTicks();
+					} else {
+						return -1;
+					}
+				} else {
+					if (arg1.getDead()) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			}
+		});
 		queue.addMessage("Statistics:");
 		this.messageEndOfLine();
-		for (int i = 0; i < group.size(); i++) {
-			Player pl = group.get(i);
+		for (int i = 0; i < players.size(); i++) {
+			Player pl = players.get(i);
 			String line = pl.getName() + " " + pl.getStatistic().getKills() 
 					+ " kills";
-			if (i == group.size() - 1) {
+			if (i == players.size() - 1) {
 				line = line + ".";
 			} else {
 				line = line + ";";
@@ -195,18 +220,23 @@ public class Messenger {
 		return this;
 	}
 	
-	public Messenger messageRunInto(Group group) {
+	public Messenger messageRunInto(Player pl1, Player pl2) {
 		RandomMessage mess = new RandomMessage();
-		mess.add(group.getNames() + " run into each other.");
-		if (group.size() == 2) {
-			mess.add(group.get(0).getName() + " encounters " 
-					+ group.get(1).getName() + ".");
+		if (Global.rollDice(50)) {
+			Player temp  = pl1;
+			pl1 = pl2;
+			pl2 = temp;
 		}
+		mess.add(pl1.getName() + " and " + pl2.getName() 
+				+ " run into each other.");
+		mess.add(pl1.getName() + " encounters " + pl2.getName() + ".");
 		queue.addMessage(mess.get());
 		return this;
 	}
 	
 	public Messenger messageSleep(Player pl) {
+		if (Global.rollDice(100))
+			queue.setIgnore(true);
 		queue.addMessage(pl.getName() + " goes to sleep.");
 		return this;
 	}
@@ -219,8 +249,6 @@ public class Messenger {
 	}
 	
 	public Messenger messageWinsGame(Player player) {
-		if (Global.rollDice(100))
-			queue.setIgnore(true);
 		queue.addMessage("Game ends. " + player.getName() + " wins the game.");
 		return this;
 	}
