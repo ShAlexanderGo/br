@@ -44,6 +44,7 @@ public class Game {
 					i--;
 				}
 			}
+			finder.updateCollisionStatus(players);
 			finder.resolveCollisions(players, weapons);
 			ListIterator<Weapon> it = weapons.listIterator();
 			while (it.hasNext()) {
@@ -53,7 +54,6 @@ public class Game {
 					it.remove();
 				}
 			}
-			players.forEach(pl -> pl.updateVicinity(players));
 			if (lastKill.isZero()) {
 				radius = (int)(0.9 * radius);
 				Global.messenger.messageGameRestricted().messageEndOfLine();

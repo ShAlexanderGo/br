@@ -24,6 +24,7 @@ public class Messenger {
 	}*/
 	
 	public void flush() {
+		needToWait = true;
 		if (!verbose)
 			return;
 		if (queue.isEmpty())
@@ -141,6 +142,7 @@ public class Messenger {
 	}
 	
 	public Messenger messageKill(Player killer, Player killed) {
+		this.messageRunInto(killer, killed);
 		RandomMessage mess = new RandomMessage();
 		mess.add(killer.getName() + " kills " + killed.getName() + ".");
 		if (killer.getWeapon() != null) {
@@ -158,6 +160,12 @@ public class Messenger {
 		return this;
 	}
 	
+	public Messenger messageKillSleeper(Player killer, Player killed) {
+		queue.addMessage(killer.getName() + " kills " + killed.getName() 
+				+ " in " + killed.getGender().getPossAdj() + " sleep.");
+		return this;
+	}
+	
 	public Messenger messageNightStarts(Clock clock) {
 		/*
 		 * Night came on.
@@ -169,7 +177,8 @@ public class Messenger {
 		return this;
 	}
 	
-	public Messenger messageNotToFight() {
+	public Messenger messageNotToFight(Player pl1, Player pl2) {
+		this.messageRunInto(pl1, pl2);
 		RandomMessage mess = new RandomMessage();
 		mess.add("They decide not to fight.");
 		mess.add("They avoid encounter.");
@@ -245,6 +254,14 @@ public class Messenger {
 		if (Global.rollDice(100))
 			queue.setIgnore(true);
 		queue.addMessage(pl.getName() + " wakes up.");
+		return this;
+	}
+	
+	public Messenger messageWakeNoise(Player pl) {
+		RandomMessage mess = new RandomMessage();
+		mess.add(pl.getName() + " wakes up because of some noise nearby.");
+		mess.add(pl.getName() + " is awoken by noise.");
+		queue.addMessage(mess.get());
 		return this;
 	}
 	
